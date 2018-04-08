@@ -7,9 +7,9 @@ function loadAllItems() {
             price: 3.00
         },
         {
+            unit: '瓶',
             barcode: 'ITEM000001',
             name: '雪碧',
-            unit: '瓶',
             price: 3.00
         },
         {
@@ -38,7 +38,9 @@ function loadAllItems() {
         }
     ];
 }
-
+module.exports = {
+    loadAllItems
+}
 function loadPromotions() {
     return [
         {
@@ -50,4 +52,7 @@ function loadPromotions() {
             ]
         }
     ];
+}
+module.exports = {
+    loadPromotions
 }
