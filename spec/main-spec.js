@@ -1,9 +1,24 @@
-const main = require('../main/main');
+const printInventory = require('../main/main');
+const readItem= require('../main/main');
 //const loadAllItems=require('../main/dabase');
 describe('pos', function () {
-    var allItems;
-    var inputs;
-
+    var inputs = [
+    'ITEM000001',
+    'ITEM000001',
+    'ITEM000001',
+    'ITEM000001',
+    'ITEM000001',
+    'ITEM000003-2',
+    'ITEM000005',
+    'ITEM000005',
+    'ITEM000005'
+];
+    it('选出给定区间中项目', function() {
+        var result = readItem(inputs);
+        expect(result).toEqual('名称：可口可乐，数量：3瓶，单价：3.00(元)，小计：6.00(元)'+
+        '名称：羽毛球，数量：5个，单价：1.00(元)，小计：4.00(元)'+
+        '名称：苹果，数量：2斤，单价：5.50(元)，小计：11.00(元)');
+    });
     beforeEach(function () {
       //  allItems = require('../main/datbase').loadAllItems();
         inputs = [
@@ -18,12 +33,11 @@ describe('pos', function () {
             'ITEM000005'
         ];
     });
-
     it('should print correct text', function () {
 
         spyOn(console, 'log');
 
-        main(inputs);
+        printInventory(inputs);
 
         var expectText =
             '***<没钱赚商店>购物清单***\n' +

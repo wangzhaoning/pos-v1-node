@@ -38,9 +38,7 @@ function loadAllItems() {
         }
     ];
 }
-module.exports = {
-    loadAllItems
-}
+
 function loadPromotions() {
     return [
         {
@@ -54,5 +52,6 @@ function loadPromotions() {
     ];
 }
 module.exports = {
-    loadPromotions
+    loadPromotions,
+    loadAllItems
 }
