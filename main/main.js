@@ -5,11 +5,13 @@ module.exports = function printInventory(inputs) {
    var  data=removeRepeat(inputs);
    var  items=readItem(data,item);
     var promotionitem=promptionShoping(items,promotion);
+    var simpletotal=simpleTotal(items,promotionitem);
     var  totalprice=total(items,promotionitem);
-     var resultpr=printresult(items,promotionitem,totalprice);
+     var resultpr=printresult(items,promotionitem,totalprice,simpletotal);
     console.log(resultpr);
    // return 'Hello World!';
 };
+
 function removeRepeat(input) {
     if(input==='')return;
     var result=new Array();
@@ -32,67 +34,93 @@ function removeRepeat(input) {
             result.push(input[i]);
         }
     }
-    for(let i=0;i<result.length;i++)
+   //console.log(result);
+   // console.log(result[1].length);
+
+    for(let i of result)
     {
-        var obj={};
-        var count=0;
+        let obj={};
+        let count=0;
+        if(i.length>11)
+        {
+            let x=i.split('-');
+            obj.id=x[0].trim();
+            obj.count=x[1];
+           // console.log(obj);
+            res.push(obj);
+            continue;
+        }
         for(let j=0;j<input.length;j++)
         {
-            if(result[i].length>10)
-            {
-                var x=result[i].split();
-                obj.id=x[0];obj.count=x[1];
-                res.push(obj);
-                break;
-            }
-            if(result[i]===input[i])
+            if(i===input[j])
             {
                 count++;
             }
         }
-        obj.id=result[i];
+        obj.id=i;
         obj.count=count;
         res.push(obj);
     }
+   // console.log(res);
     return res;
 }
+
 function readItem(data,item) {
     var result=new Array();
-
-      for(let j=0;j<data.length;j++)
+      for(let j of data)
       {
           var obj={};
-          for(let i=0;i<item.length;i++)
+          for(let i of item)
        {
-          if(data[j].id===item[i].barcode)
+          if(j.id===i.barcode)
           {
-              obj.id=data.id;
-              obj.name=item.name;
-              obj.num=data[j].count;
-              obj.unit=item.unit;
-              obj.price=item.price;
-              obj.sumprice=obj.price*obj.count;
+              obj.id=j.id;
+              obj.name=i.name;
+              obj.num=j.count;
+              obj.unit=i.unit;
+              obj.price=i.price;//如何保留小数点后两位
+              obj.sumprice=obj.price*obj.num;//如何保留小数点后两位
+             // console.log(obj.sumprice);
               result.push(obj);
               break;
           }
        }
       }
+    //console.log(result);
          return result;
 }
+
+function simpleTotal(items,promotionitem) {
+    let result=new Array();
+    for(let i=0;i<items.length;i++)
+    {
+        for(let j=0;j<promotionitem.length;j++)
+        {
+            result[i]=items[i].sumprice;
+            if(items[i].name===promotionitem[j].name)
+            {
+                result[i]=items[i].sumprice-(promotionitem[j].count*items[i].price);
+                break;
+            }
+        }
+    }
+    return result;
+}
+
 function promptionShoping(items,promotion) {
     var promotionItem=new Array();
 
-    for(let i=0;i<items.length;i++)
+    for(let i of items)
     {
-        var obj={};
-        for(let j=0;j<promotion[0].barcodes.length;j++)
+        let obj={};
+        for(let j of promotion[0].barcodes)
         {
-            if(items[i].id===promotion[0].barcodes[j]&&items[i].count>=3)
+            if(i.id===j&&i.num>2)
             {
-                     obj.name=items[i].name;
-                     obj.count=items[i].count/3;
-                     obj.unit=items[i].unit;
-                     obj.price=items[i].price;
+                     obj.name=i.name;
+                     obj.count=Math.floor(i.num/3);
+                     obj.unit=i.unit;
+                     obj.price=i.price;
                      promotionItem.push(obj);
                      break;
             }
@@ -104,31 +132,34 @@ function total(items,promotionitem) {
     var obj={};
     obj.total=0;
     obj.save=0;
-    for(let i=0;i<items.length;i++)
+    for(let i of items)
     {
-        obj.total+=items[i].sumprice;
+        obj.total+=i.sumprice;
     }
-    for(let j=0;j<promotionitem.length;j++)
+    for(let j of promotionitem)
     {
-       obj.save+=promotionitem[j].price*promotionitem[j].count;
+       obj.save+=j.price*j.count;
     }
     return obj;
 }
-function printresult(items,promotionitem,totalprice) {
+
+function printresult(items,promotionitem,totalprice,simpletotal) {
     var soulte='***<没钱赚商店>购物清单***\n';
     for(let i=0;i<items.length;i++)
     {
-        soulte+= '名称：'+items[i].name+'，数量：'+items[i].count+items[i].unit+'，单价：'+items[i].price+'(元)，小计：'+items[i].sumprice+'(元)\n';
+        soulte+= '名称：'+items[i].name+'，数量：'+items[i].num+items[i].unit+'，单价：'+parseFloat(items[i].price).toFixed(2)+'(元)，小计：'+parseFloat(simpletotal[i]).toFixed(2)+'(元)\n';
     }
     soulte+='----------------------\n';
     soulte+='挥泪赠送商品：\n';
-    for(let j=0;j<promotionitem;j++)
+    for(let j of promotionitem)
     {
-        soulte+='名称'+promotionitem[j].name+'，数量：'+promotionitem[j].count+promotionitem[j].unit+'\n';
+        soulte+='名称：'+j.name+'，数量：'+j.count+j.unit+'\n';
     }
 soulte+= '----------------------\n';
-    soulte+= '总计：'+totalprice.total+'(元)'+'\n';
-    soulte+='节省：'+totalprice.save+'(元)\n';
+    soulte+= '总计：'+parseFloat((totalprice.total-totalprice.save)).toFixed(2)+'(元)'+'\n';
+    soulte+='节省：'+parseFloat(totalprice.save).toFixed(2)+'(元)\n';
     soulte+='**********************';
     return soulte;
 }
+
+
