@@ -1,4 +1,4 @@
-const printInventory = require('../main/main');
+//    const printInventory = require('../main/main');
 const  removeRepeat= require('../main/main');
 //const loadAllItems=require('../main/dabase');
 describe('pos', function () {

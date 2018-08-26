@@ -51,7 +51,7 @@ function loadPromotions() {
         }
     ];
 }
-module.exports = {
+/*module.exports = {
     loadPromotions,
     loadAllItems
-}
+}*/

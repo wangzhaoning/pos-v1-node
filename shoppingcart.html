@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>购物车</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+
+        .minus_btn {
+            float: left;
+        }
+
+        .add_btn {
+            float: left;
+
+        }
+
+        .each_bought p {
+            float: left;
+        }
+
+    </style>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="./main/datbase.js"></script>
+    <script src="./main/shoppingcart.js"></script>
+
+</head>
+<body>
+<div class="items">
+    <h1>购物车</h1>
+    <div id="dialog-message" title="提示">
+        <p>
+            <span style="float:left; margin:0 7px 50px 0;"></span>
+            请先购物再结算
+        </p>
+    </div>
+    <div id="bought_items">
+
+    </div>
+    <button id="ok_img">打印账单</button>
+</div>
+</body>
+</html>
